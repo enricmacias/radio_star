@@ -2,21 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/views/favorite/favorite_view.dart';
 import 'package:radio_star/views/search/search_view.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../view_models/home/home_view_model.dart';
 import 'mini_player_view.dart';
-
-part 'home_view.g.dart';
-
-@riverpod
-class PageIndex extends _$PageIndex {
-  @override
-  int build() => 0;
-
-  void onDestinationSelected(int index) {
-    state = index;
-  }
-}
 
 class HomeView extends ConsumerWidget {
   const HomeView({super.key});
