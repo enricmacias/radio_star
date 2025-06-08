@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:radio_star/views/favorite_view.dart';
-import 'package:radio_star/views/search_view.dart';
+import 'package:radio_star/views/favorite/favorite_view.dart';
+import 'package:radio_star/views/search/search_view.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'mini_player_view.dart';
