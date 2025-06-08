@@ -13,6 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
+  flutter_my_radio: ^1.11.2
 
 dev_dependencies:
   flutter_test:
