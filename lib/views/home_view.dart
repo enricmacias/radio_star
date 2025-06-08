@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:radio_star/views/favorite_view.dart';
+import 'package:radio_star/views/search_view.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_view.g.dart';
@@ -36,25 +38,13 @@ class HomeView extends ConsumerWidget {
           NavigationDestination(
             selectedIcon: Icon(Icons.star),
             icon: Icon(Icons.star_outline),
-            label: 'Favorites',
+            label: 'Favorite Stations',
           ),
         ]),
         body:
           <Widget>[
-            Card(
-        shadowColor: Colors.transparent,
-        margin: const EdgeInsets.all(8.0),
-        child: SizedBox.expand(
-          child: Center(child: Text('Search page')),
-        ),
-      ),
-            Card(
-        shadowColor: Colors.transparent,
-        margin: const EdgeInsets.all(8.0),
-        child: SizedBox.expand(
-          child: Center(child: Text('Favorite page')),
-        ),
-      ),
+            SearchView(),
+            FavoriteView(),
             ][pageIndex],
       );
     }
