@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/views/favorite/favorite_view.dart';
 import 'package:radio_star/views/search/search_view.dart';
 
-import '../../view_models/home/home_view_model.dart';
+import '../../providers/home/page_index_provider.dart';
 import 'mini_player_view.dart';
 
 class HomeView extends ConsumerWidget {

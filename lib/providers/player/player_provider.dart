@@ -2,7 +2,7 @@ import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'player_view_model.g.dart';
+part 'player_provider.g.dart';
 
 @riverpod
 class Player extends _$Player {

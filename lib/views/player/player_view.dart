@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:radio_star/views/player/play_pause_button_view.dart';
-import '../../view_models/player/player_view_model.dart';
+import '../../providers/player/player_provider.dart';
 
 class PlayerView extends ConsumerStatefulWidget {
   const PlayerView({Key? key}) : super(key: key);

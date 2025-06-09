@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'player_view_model.dart';
+part of 'player_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'd08b267feb2d750404e6bfdca8cb3935eadc0397';
+String _$playerHash() => r'43ffeef66245a7092aba21e0daa5ab32ccc8e74b';
 
 /// See also [Player].
 @ProviderFor(Player)

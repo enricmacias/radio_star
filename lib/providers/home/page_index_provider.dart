@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'home_view_model.g.dart';
+part 'page_index_provider.g.dart';
 
 @riverpod
 class PageIndex extends _$PageIndex {

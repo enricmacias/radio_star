@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import '../../view_models/player/player_view_model.dart';
+import '../../providers/player/player_provider.dart';
 
 class PlayPauseButtonView extends ConsumerWidget {
   const PlayPauseButtonView({super.key});
