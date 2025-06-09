@@ -1,13 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:just_audio/just_audio.dart';
+import 'package:radio_star/views/player/play_pause_button_view.dart';
+import '../../providers/player/player_provider.dart';
 import '../player/player_view.dart';
 
-class MiniPlayerView extends ConsumerWidget {
+class MiniPlayerView extends ConsumerStatefulWidget {
   const MiniPlayerView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MiniPlayerView> createState() => _MiniPlayerViewState();
+}
+
+class _MiniPlayerViewState extends ConsumerState<MiniPlayerView>
+    with WidgetsBindingObserver {
+  AudioPlayer? _player;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.black),
+    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _player?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _player?.stop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final player = ref.watch(playerProvider);
+
+    // Only initialize once
+    if (_player != player) {
+      _player = player;
+      ref.read(playerProvider.notifier).init();
+    }
+
     return GestureDetector(
       onTap: () {
         showModalBottomSheet(
@@ -44,26 +86,21 @@ class MiniPlayerView extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 12),
-            // Song Info
+            // Radio Station Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Song Title',
+                    'Radio Station',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    'Artist Name',
-                    style: Theme.of(context).textTheme.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                  ),
                   const SizedBox(height: 4),
-                  // Progress Bar
+                  // Progress Bar (static for now)
                   LinearProgressIndicator(
                     value: 0.4, // Example progress
                     minHeight: 3,
@@ -77,12 +114,7 @@ class MiniPlayerView extends ConsumerWidget {
             ),
             const SizedBox(width: 12),
             // Play/Pause Button
-            IconButton(
-              icon: const Icon(Icons.play_arrow),
-              onPressed: () {
-                // TODO: Implement play/pause logic
-              },
-            ),
+            PlayPauseButtonView(),
           ],
         ),
       ),

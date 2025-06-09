@@ -1,54 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:radio_star/views/player/play_pause_button_view.dart';
-import '../../providers/player/player_provider.dart';
 
-class PlayerView extends ConsumerStatefulWidget {
-  const PlayerView({Key? key}) : super(key: key);
-
-  @override
-  ConsumerState<PlayerView> createState() => PlayerViewState();
-}
-
-class PlayerViewState extends ConsumerState<PlayerView>
-    with WidgetsBindingObserver {
-  AudioPlayer? _player;
+class PlayerView extends ConsumerWidget {
+  const PlayerView({super.key});
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.black),
-    );
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _player?.dispose();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _player?.stop();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final player = ref.watch(playerProvider);
-
-    // Only initialize once
-    if (_player != player) {
-      _player = player;
-      ref.read(playerProvider.notifier).init();
-    }
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
