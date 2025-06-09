@@ -5,7 +5,7 @@ import 'package:flutter_my_radio/objects/search_parameter.dart';
 import 'package:flutter_my_radio/objects/station_filter_types.dart';
 
 class SearchView extends StatefulWidget {
-  SearchView({super.key});
+  const SearchView({super.key});
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -32,23 +32,28 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Radio plug-in'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       var lst = await radioTools.getList("", RadioListTypes.languages);
-              //     },
-              //     child: const Text("test")),
-              Stack(alignment: AlignmentDirectional.topEnd, children: [
+      appBar: AppBar(title: const Text('My Radio plug-in')),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       var lst = await radioTools.getList("", RadioListTypes.languages);
+            //     },
+            //     child: const Text("test")),
+            Stack(
+              alignment: AlignmentDirectional.topEnd,
+              children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 8, left: 8, bottom: 8, top: 13),
+                  padding: const EdgeInsets.only(
+                    right: 8,
+                    left: 8,
+                    bottom: 8,
+                    top: 13,
+                  ),
                   child: SizedBox(
                     height: 40,
                     child: SearchBar(
@@ -62,63 +67,81 @@ class _SearchViewState extends State<SearchView> {
                   ),
                 ),
                 countWidget,
-              ]),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: FutureBuilder(
-                  future: getRadios()..then((value) => countListener.value = value.length),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.deepPurpleAccent,
+              ],
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: FutureBuilder(
+                future:
+                    getRadios()
+                      ..then((value) => countListener.value = value.length),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.deepPurpleAccent,
+                      ),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          'An ${snapshot.error} occurred',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.red,
+                          ),
                         ),
                       );
-                    }
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text(
-                            'An ${snapshot.error} occurred',
-                            style: const TextStyle(fontSize: 18, color: Colors.red),
-                          ),
-                        );
-                      } else if (snapshot.hasData) {
-                        radios = snapshot.data;
+                    } else if (snapshot.hasData) {
+                      radios = snapshot.data;
 
-                        return radios == null
-                            ? const Text("No result found")
-                            : ListView.builder(
-                                itemCount: radios!.length,
-                                itemBuilder: (context, index) {
-                                  return radios![index].widget(beforeStart: (p) async {
-                                    await _currentRadio?.player
-                                        .fadeOut(duration: const Duration(milliseconds: 1000)); //player.stop();
-                                    _currentRadio = p;
-                                    if (radios![index].stationUUID != null) radioTools.addClick(radios![index].stationUUID!);
-                                  }, onStop: (p) {
-                                    _currentRadio = null;
-                                  });
-                                });
-                      }
+                      return radios == null
+                          ? const Text("No result found")
+                          : ListView.builder(
+                            itemCount: radios!.length,
+                            itemBuilder: (context, index) {
+                              return radios![index].widget(
+                                beforeStart: (p) async {
+                                  await _currentRadio?.player.fadeOut(
+                                    duration: const Duration(
+                                      milliseconds: 1000,
+                                    ),
+                                  ); //player.stop();
+                                  _currentRadio = p;
+                                  if (radios![index].stationUUID != null) {
+                                    radioTools.addClick(
+                                      radios![index].stationUUID!,
+                                    );
+                                  }
+                                },
+                                onStop: (p) {
+                                  _currentRadio = null;
+                                },
+                              );
+                            },
+                          );
                     }
+                  }
 
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ),
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    }
-Widget menu(BuildContext context) {
+      ),
+    );
+  }
+
+  Widget menu(BuildContext context) {
     return MenuAnchor(
-      builder: (BuildContext context, MenuController controller, Widget? child) {
+      builder: (
+        BuildContext context,
+        MenuController controller,
+        Widget? child,
+      ) {
         return IconButton(
           onPressed: () {
             controller.isOpen ? controller.close() : controller.open();
@@ -131,18 +154,27 @@ Widget menu(BuildContext context) {
         FilterType.values.length,
         (int index) => MenuItemButton(
           style: TextButton.styleFrom(
-              visualDensity: VisualDensity.compact,
-              alignment: AlignmentDirectional.center,
-              backgroundColor: FilterType.values[index] == filterType ? Theme.of(context).colorScheme.primary : null),
-          onPressed: () => setState(() {
-            filterType = FilterType.values[index];
-            search.text = lastSearch = "";
-            radios?.clear();
-          }),
+            visualDensity: VisualDensity.compact,
+            alignment: AlignmentDirectional.center,
+            backgroundColor:
+                FilterType.values[index] == filterType
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+          ),
+          onPressed:
+              () => setState(() {
+                filterType = FilterType.values[index];
+                search.text = lastSearch = "";
+                radios?.clear();
+              }),
           child: Text(
             ["Name", "Strict name", "Country name", "Language"][index],
-            style: const TextStyle()
-                .copyWith(color: FilterType.values[index] == filterType ? Theme.of(context).colorScheme.onPrimary : null),
+            style: const TextStyle().copyWith(
+              color:
+                  FilterType.values[index] == filterType
+                      ? Theme.of(context).colorScheme.onPrimary
+                      : null,
+            ),
           ),
         ),
       ),
@@ -160,20 +192,31 @@ Widget menu(BuildContext context) {
     lastSearch = search.text;
     return search.text == ""
         ? Future.value([])
-        : radioTools.findRadio(search.text, filterType.toStationFilter, forceHttps: true, parameters: p);
+        : radioTools.findRadio(
+          search.text,
+          filterType.toStationFilter,
+          forceHttps: true,
+          parameters: p,
+        );
   }
 
   Widget get countWidget => ValueListenableBuilder<int?>(
-      valueListenable: countListener,
-      builder: (context, int? data, child) {
-        return Badge(
-            isLabelVisible: data != null,
-            largeSize: 25,
-            label: Container(
-                alignment: AlignmentDirectional.center,
-                constraints: const BoxConstraints(minWidth: 17),
-                child: Text(data.toString(), style: const TextStyle().copyWith(color: Colors.white))));
-      });
+    valueListenable: countListener,
+    builder: (context, int? data, child) {
+      return Badge(
+        isLabelVisible: data != null,
+        largeSize: 25,
+        label: Container(
+          alignment: AlignmentDirectional.center,
+          constraints: const BoxConstraints(minWidth: 17),
+          child: Text(
+            data.toString(),
+            style: const TextStyle().copyWith(color: Colors.white),
+          ),
+        ),
+      );
+    },
+  );
 }
 
 extension FilterExt on FilterType {
