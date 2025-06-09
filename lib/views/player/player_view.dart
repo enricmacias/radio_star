@@ -1,20 +1,19 @@
-// Minimal radio player using just_audio, no media_kit_stub.dart dependency.
-
-import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:rxdart/rxdart.dart';
+import '../../view_models/player/player_view_model.dart';
 
-class PlayerView extends StatefulWidget {
+class PlayerView extends ConsumerStatefulWidget {
   const PlayerView({Key? key}) : super(key: key);
 
   @override
-  PlayerViewState createState() => PlayerViewState();
+  ConsumerState<PlayerView> createState() => PlayerViewState();
 }
 
-class PlayerViewState extends State<PlayerView> with WidgetsBindingObserver {
-  final _player = AudioPlayer();
+class PlayerViewState extends ConsumerState<PlayerView>
+    with WidgetsBindingObserver {
+  AudioPlayer? _player;
 
   @override
   void initState() {
@@ -23,52 +22,32 @@ class PlayerViewState extends State<PlayerView> with WidgetsBindingObserver {
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.black),
     );
-    _init();
-  }
-
-  Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(const AudioSessionConfiguration.speech());
-    _player.errorStream.listen((e) {
-      print('A stream error occurred: $e');
-    });
-    try {
-      // Use the provided radio stream URL
-      await _player.setAudioSource(
-        AudioSource.uri(
-          Uri.parse("https://s2-webradio.antenne.de/chillout?icy=https"),
-        ),
-      );
-    } on PlayerException catch (e) {
-      print("Error loading audio source: $e");
-    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _player.dispose();
+    _player?.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      _player.stop();
+      _player?.stop();
     }
   }
 
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-        _player.positionStream,
-        _player.bufferedPositionStream,
-        _player.durationStream,
-        (position, bufferedPosition, duration) =>
-            PositionData(position, bufferedPosition, duration ?? Duration.zero),
-      );
-
   @override
   Widget build(BuildContext context) {
+    final player = ref.watch(playerProvider);
+
+    // Only initialize once
+    if (_player != player) {
+      _player = player;
+      ref.read(playerProvider.notifier).init();
+    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -77,14 +56,14 @@ class PlayerViewState extends State<PlayerView> with WidgetsBindingObserver {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ControlButtons(_player),
+              ControlButtons(player),
               ElevatedButton(
                 onPressed: () {
-                  _player.setAudioSource(
-                    AudioSource.uri(
-                      Uri.parse("http://stream.riverradio.com:8000/wcvofm.aac"),
-                    ),
-                  );
+                  ref
+                      .read(playerProvider.notifier)
+                      .onAudioSourceChanged(
+                        "http://stream.riverradio.com:8000/wcvofm.aac",
+                      );
                 },
                 child: const Text('new radio'),
               ),
@@ -204,55 +183,6 @@ class ControlButtons extends StatelessWidget {
               ),
         ),
       ],
-    );
-  }
-}
-
-// Helper class for seek bar data
-class PositionData {
-  final Duration position;
-  final Duration bufferedPosition;
-  final Duration duration;
-
-  PositionData(this.position, this.bufferedPosition, this.duration);
-}
-
-// Simple SeekBar widget
-class SeekBar extends StatelessWidget {
-  final Duration duration;
-  final Duration position;
-  final Duration bufferedPosition;
-  final ValueChanged<Duration>? onChangeEnd;
-
-  const SeekBar({
-    Key? key,
-    required this.duration,
-    required this.position,
-    required this.bufferedPosition,
-    this.onChangeEnd,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Slider(
-      min: 0.0,
-      max:
-          duration.inMilliseconds.toDouble() > 0
-              ? duration.inMilliseconds.toDouble()
-              : 1.0,
-      value:
-          position.inMilliseconds
-              .clamp(
-                0,
-                duration.inMilliseconds > 0 ? duration.inMilliseconds : 1,
-              )
-              .toDouble(),
-      onChanged: (value) {},
-      onChangeEnd: (value) {
-        if (onChangeEnd != null) {
-          onChangeEnd!(Duration(milliseconds: value.round()));
-        }
-      },
     );
   }
 }
