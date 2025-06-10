@@ -2,7 +2,6 @@
 
 App to search and listen to radio stations. You can also favorite your favorite stations.
 
-![alt text]()
 <img src="https://github.com/enricmacias/radio_star/blob/main/images/logo.png" alt="logo" width="300">
 
 ## How to Compile the Project
