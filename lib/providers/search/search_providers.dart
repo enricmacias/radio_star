@@ -51,3 +51,13 @@ Future<RadioStation> radioStationAtIndex(
   final response = await ref.watch(radioStationsProvider(searchedName).future);
   return response.radioStations[index];
 }
+
+@riverpod
+class SearchedNameProvider extends _$SearchedNameProvider {
+  @override
+  String build() => '';
+
+  void onTextChanged(String text) {
+    state = text;
+  }
+}

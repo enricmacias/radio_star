@@ -433,5 +433,23 @@ class _RadioStationAtIndexProviderElement
   int get index => (origin as RadioStationAtIndexProvider).index;
 }
 
+String _$searchedNameProviderHash() =>
+    r'8a91e2be4dc65a5a4a4ce16264cf5acef540adbc';
+
+/// See also [SearchedNameProvider].
+@ProviderFor(SearchedNameProvider)
+final searchedNameProviderProvider =
+    AutoDisposeNotifierProvider<SearchedNameProvider, String>.internal(
+      SearchedNameProvider.new,
+      name: r'searchedNameProviderProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$searchedNameProviderHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+typedef _$SearchedNameProvider = AutoDisposeNotifier<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

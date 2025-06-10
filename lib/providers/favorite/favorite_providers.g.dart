@@ -24,7 +24,7 @@ final favoritesListProvider = FutureProvider<List<RadioStation>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FavoritesListRef = FutureProviderRef<List<RadioStation>>;
-String _$favoriteStationsHash() => r'4c1be544038d2c466e1414ec141a1e2761567c9f';
+String _$favoriteStationsHash() => r'76653e6de41458dd6e9c814938b134ad3a1ffe19';
 
 /// See also [FavoriteStations].
 @ProviderFor(FavoriteStations)
