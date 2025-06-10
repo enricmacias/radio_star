@@ -14,5 +14,6 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ## Things to improve
 - Make errors user friendly
-- Add a default screen on the search section to be able to search stations by genre
+- Add a default screen on the search section to be able to search stations by genre (collection view search by tags)
 - Keep track of the listening station and mark it yellow in both lists (search and favorites)
+- Ad a search button in favorites screen to be able to search inside your favorites
