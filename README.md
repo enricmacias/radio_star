@@ -12,6 +12,9 @@ flutter pub get
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
+## Architecture and State Management
+- MMVM with Riverpod Annotations
+
 ## Things to improve
 - Improve search speed by implementing pagination to the search
 - Make errors user friendly
