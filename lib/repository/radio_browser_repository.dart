@@ -1,0 +1,81 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:radio_star/models/radio_station.dart';
+import 'package:radio_star/models/radio_stations_list_response.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'radio_browser_repository.g.dart';
+
+@riverpod
+Dio dio(Ref ref) {
+  final dio = Dio();
+  dio.options.connectTimeout = const Duration(seconds: 10);
+  dio.options.receiveTimeout = const Duration(seconds: 10);
+  dio.interceptors.add(
+    LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+    ),
+  );
+  return dio;
+}
+
+@riverpod
+RadioBrowserRepository radioBrowserRepository(Ref ref) {
+  return RadioBrowserRepository(ref);
+}
+
+class RadioBrowserRepository {
+  RadioBrowserRepository(this.ref);
+
+  final Ref ref;
+  final _radioStationCache = <String, RadioStation>{};
+
+  Future<RadioStationsListResponse> searchByName({
+    String? nameStartsWith,
+    CancelToken? cancelToken,
+  }) async {
+    final cleanNameFilter = nameStartsWith?.trim();
+
+    final result = await _get(
+      'search?name=$cleanNameFilter',
+      cancelToken: cancelToken,
+    );
+    for (final radioStation in result.radioStations) {
+      _radioStationCache[radioStation.stationuuid] = radioStation;
+    }
+    print(result);
+    return result;
+  }
+
+  Future<RadioStationsListResponse> _get(
+    String path, {
+    CancelToken? cancelToken,
+  }) async {
+    final result = await ref
+        .read(dioProvider)
+        .get<String>(
+          'http://fi1.api.radio-browser.info/json/stations/$path',
+          cancelToken: cancelToken,
+          // TO-DO deserialize error message
+        );
+
+    final data =
+        (json.decode(result.data ?? '[]') as List).cast<Map<String, Object?>>();
+
+    final list = RadioStationsListResponse(
+      radioStations: data
+          .map((e) {
+            return RadioStation.fromJson(e);
+          })
+          .toList(growable: false),
+      totalCount: data.length,
+    );
+
+    return list;
+  }
+}
