@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:radio_star/providers/search/search_providers.dart';
 import 'search_result_list_view.dart';
-
-// Create a provider for the searched name
-final searchedNameProvider = StateProvider<String>((ref) => '');
 
 class SearchView extends ConsumerStatefulWidget {
   const SearchView({super.key});
@@ -29,7 +27,7 @@ class _SearchViewState extends ConsumerState<SearchView> {
             prefixIcon: Icon(Icons.search),
           ),
           onChanged: (value) {
-            ref.read(searchedNameProvider.notifier).state = value;
+            ref.read(searchedNameProvider.notifier).onTextChanged(value);
           },
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,

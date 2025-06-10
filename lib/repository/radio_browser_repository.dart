@@ -4,30 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/models/radio_station.dart';
 import 'package:radio_star/models/radio_stations_list_response.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'radio_browser_repository.g.dart';
-
-@riverpod
-Dio dio(Ref ref) {
-  final dio = Dio();
-  dio.options.connectTimeout = const Duration(seconds: 10);
-  dio.options.receiveTimeout = const Duration(seconds: 10);
-  dio.interceptors.add(
-    LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      requestHeader: true,
-      responseHeader: true,
-    ),
-  );
-  return dio;
-}
-
-@riverpod
-RadioBrowserRepository radioBrowserRepository(Ref ref) {
-  return RadioBrowserRepository(ref);
-}
+import 'package:radio_star/providers/search/search_providers.dart';
 
 class RadioBrowserRepository {
   RadioBrowserRepository(this.ref);
@@ -48,6 +25,8 @@ class RadioBrowserRepository {
     for (final radioStation in result.radioStations) {
       _radioStationCache[radioStation.stationuuid] = radioStation;
     }
+    // TODO: remove this print statement in production
+    // This print statement is for debugging purposes to see the fetched radio stations.
     print(result);
     return result;
   }

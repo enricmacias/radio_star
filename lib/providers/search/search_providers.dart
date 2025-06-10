@@ -10,6 +10,27 @@ part 'search_providers.g.dart';
 class AbortedException implements Exception {}
 
 @riverpod
+Dio dio(Ref ref) {
+  final dio = Dio();
+  dio.options.connectTimeout = const Duration(seconds: 10);
+  dio.options.receiveTimeout = const Duration(seconds: 10);
+  dio.interceptors.add(
+    LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+    ),
+  );
+  return dio;
+}
+
+@riverpod
+RadioBrowserRepository radioBrowserRepository(Ref ref) {
+  return RadioBrowserRepository(ref);
+}
+
+@riverpod
 Future<RadioStationsListResponse> radioStations(
   Ref ref,
   String searchedName,
@@ -53,7 +74,7 @@ Future<RadioStation> radioStationAtIndex(
 }
 
 @riverpod
-class SearchedNameProvider extends _$SearchedNameProvider {
+class SearchedName extends _$SearchedName {
   @override
   String build() => '';
 
