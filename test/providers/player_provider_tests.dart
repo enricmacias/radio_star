@@ -22,6 +22,7 @@ void main() {
 
       final notifier = container.read(currentRadioStationProvider.notifier);
       final testStation = RadioStation(
+        stationuuid: 'test-uuid',
         name: 'Test Station',
         url: 'https://test.url',
         favicon: 'https://test.img',
@@ -53,6 +54,7 @@ void main() {
 
         final notifier = container.read(playerProvider.notifier);
         final testStation = RadioStation(
+          stationuuid: 'test-uuid',
           name: 'Test Station',
           url: 'https://test.url',
           favicon: 'https://test.img',
