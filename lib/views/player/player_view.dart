@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/providers/favorite/favorite_providers.dart';
-import 'package:radio_star/views/player/play_pause_button_view.dart';
+import 'package:radio_star/views/common/play_pause_button_view.dart';
 import '../../providers/player/player_provider.dart';
 
 class PlayerView extends ConsumerWidget {

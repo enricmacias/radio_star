@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:radio_star/views/player/play_pause_button_view.dart';
+import 'package:radio_star/views/common/play_pause_button_view.dart';
 import '../../providers/player/player_provider.dart';
 import '../player/player_view.dart';
 
