@@ -19,7 +19,9 @@ class Player extends _$Player {
       // Use the provided radio stream URL
       await state.setAudioSource(
         AudioSource.uri(
-          Uri.parse("https://s2-webradio.antenne.de/chillout?icy=https"),
+          Uri.parse(
+            "https://rautemusik.stream43.radiohost.de/breakz?ref=rb-djclubcharts&upd-meta=0&upd-scheme=https&_art=dD0xNzQ5NTI2NjI4JmQ9ZjBlZDgxODc3NWFkN2NmMzk4YmU",
+          ),
         ),
       );
     } on PlayerException catch (e) {
