@@ -58,8 +58,9 @@ class RadioStationCellView extends ConsumerWidget {
               ref.read(selectedRadioStationIndexProvider.notifier).state =
                   index;
               ref
-                  .read(playerProvider.notifier)
-                  .onAudioSourceChanged(station.url);
+                  .read(currentRadioStationProvider.notifier)
+                  .onRadioStationSelected(station);
+              ref.read(playerProvider.notifier).onAudioSourceChanged(station);
               ref.watch(playerProvider).play();
             },
           ),

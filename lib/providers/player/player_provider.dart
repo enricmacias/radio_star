@@ -1,8 +1,19 @@
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:radio_star/models/radio_station.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'player_provider.g.dart';
+
+@riverpod
+class CurrentRadioStation extends _$CurrentRadioStation {
+  @override
+  RadioStation? build() => null;
+
+  void onRadioStationSelected(RadioStation radioStation) {
+    state = radioStation;
+  }
+}
 
 @riverpod
 class Player extends _$Player {
@@ -15,23 +26,11 @@ class Player extends _$Player {
     state.errorStream.listen((e) {
       print('A stream error occurred: $e');
     });
-    try {
-      // Use the provided radio stream URL
-      await state.setAudioSource(
-        AudioSource.uri(
-          Uri.parse(
-            "https://rautemusik.stream43.radiohost.de/breakz?ref=rb-djclubcharts&upd-meta=0&upd-scheme=https&_art=dD0xNzQ5NTI2NjI4JmQ9ZjBlZDgxODc3NWFkN2NmMzk4YmU",
-          ),
-        ),
-      );
-    } on PlayerException catch (e) {
-      print("Error loading audio source: $e");
-    }
   }
 
-  Future<void> onAudioSourceChanged(String url) async {
+  Future<void> onAudioSourceChanged(RadioStation radioStation) async {
     try {
-      await state.setAudioSource(AudioSource.uri(Uri.parse(url)));
+      await state.setAudioSource(AudioSource.uri(Uri.parse(radioStation.url)));
     } on PlayerException catch (e) {
       print("Error changing audio source: $e");
     }

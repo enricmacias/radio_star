@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/views/player/play_pause_button_view.dart';
+import '../../providers/player/player_provider.dart';
 
 class PlayerView extends ConsumerWidget {
   const PlayerView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentStation = ref.watch(currentRadioStationProvider);
+
+    final stationName = currentStation?.name ?? 'Radio Station';
+    final favicon = currentStation?.favicon;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -38,23 +44,45 @@ class PlayerView extends ConsumerWidget {
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.music_note,
-                  size: 120,
-                  color: Colors.grey,
-                ),
+                child:
+                    (favicon != null && favicon.isNotEmpty)
+                        ? ClipRRect(
+                          borderRadius: BorderRadius.circular(24),
+                          child: Image.network(
+                            favicon,
+                            width: 240,
+                            height: 240,
+                            fit: BoxFit.cover,
+                            errorBuilder:
+                                (context, error, stackTrace) => const Icon(
+                                  Icons.music_note,
+                                  size: 120,
+                                  color: Colors.grey,
+                                ),
+                          ),
+                        )
+                        : const Icon(
+                          Icons.music_note,
+                          size: 120,
+                          color: Colors.grey,
+                        ),
               ),
             ),
             const SizedBox(height: 32),
             // Radio Station Name
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Text(
-                'Radio Station',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  stationName,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
             const Spacer(),

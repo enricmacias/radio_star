@@ -6,7 +6,25 @@ part of 'player_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'1bcddf09d44b6a944c8b87282d57ffdd1e65a035';
+String _$currentRadioStationHash() =>
+    r'20268a6e50cb6cc31ce94782cf61c216f9e42550';
+
+/// See also [CurrentRadioStation].
+@ProviderFor(CurrentRadioStation)
+final currentRadioStationProvider =
+    AutoDisposeNotifierProvider<CurrentRadioStation, RadioStation?>.internal(
+      CurrentRadioStation.new,
+      name: r'currentRadioStationProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$currentRadioStationHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+typedef _$CurrentRadioStation = AutoDisposeNotifier<RadioStation?>;
+String _$playerHash() => r'7f07a2db900ab846a8d49e7c1574f2a259d21e64';
 
 /// See also [Player].
 @ProviderFor(Player)

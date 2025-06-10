@@ -43,12 +43,16 @@ class _MiniPlayerViewState extends ConsumerState<MiniPlayerView>
   @override
   Widget build(BuildContext context) {
     final player = ref.watch(playerProvider);
+    final currentStation = ref.watch(currentRadioStationProvider);
 
     // Only initialize once
     if (_player != player) {
       _player = player;
       ref.read(playerProvider.notifier).init();
     }
+
+    final stationName = currentStation?.name ?? 'Radio Station';
+    final favicon = currentStation?.favicon;
 
     return GestureDetector(
       onTap: () {
@@ -75,15 +79,33 @@ class _MiniPlayerViewState extends ConsumerState<MiniPlayerView>
         ),
         child: Row(
           children: [
-            // Album Art Placeholder
+            // Album Art or Favicon
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 48,
-                height: 48,
-                color: Colors.grey[300],
-                child: const Icon(Icons.music_note, color: Colors.grey),
-              ),
+              child:
+                  (favicon != null && favicon.isNotEmpty)
+                      ? Image.network(
+                        favicon,
+                        width: 48,
+                        height: 48,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (context, error, stackTrace) => Container(
+                              width: 48,
+                              height: 48,
+                              color: Colors.grey[300],
+                              child: const Icon(
+                                Icons.music_note,
+                                color: Colors.grey,
+                              ),
+                            ),
+                      )
+                      : Container(
+                        width: 48,
+                        height: 48,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.music_note, color: Colors.grey),
+                      ),
             ),
             const SizedBox(width: 12),
             // Radio Station Info
@@ -93,21 +115,11 @@ class _MiniPlayerViewState extends ConsumerState<MiniPlayerView>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Radio Station',
+                    stationName,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  // Progress Bar (static for now)
-                  LinearProgressIndicator(
-                    value: 0.4, // Example progress
-                    minHeight: 3,
-                    backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Theme.of(context).colorScheme.primary,
-                    ),
                   ),
                 ],
               ),
