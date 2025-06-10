@@ -19,6 +19,7 @@ dependencies:
   dio: ^5.8.0+1
   crypto: ^3.0.6
   audio_session: ^0.2.2
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
