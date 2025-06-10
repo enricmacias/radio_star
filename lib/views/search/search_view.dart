@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:radio_star/providers/search/search_providers.dart';
-import 'package:radio_star/views/search/radio_station_cell_view.dart';
+import 'package:radio_star/views/common/radio_station_cell_view.dart';
 
 class AbortedException implements Exception {}
 
@@ -38,14 +38,27 @@ class SearchView extends ConsumerWidget {
                 body: ListView.builder(
                   itemCount: radioStationsCount,
                   itemBuilder: (context, index) {
-                    return ProviderScope(
-                      overrides: [
-                        radioStationsIndexProvider.overrideWithValue(index),
-                      ],
-                      child: RadioStationCellView(
-                        index: index,
-                        searchedName: searchedName,
-                      ),
+                    final stationAsync = ref.watch(
+                      radioStationAtIndexProvider(searchedName, index),
+                    );
+                    return stationAsync.when(
+                      loading:
+                          () =>
+                              const ListTile(title: LinearProgressIndicator()),
+                      error:
+                          (err, stack) => ListTile(title: Text('Error: $err')),
+                      data:
+                          (radioStation) => ProviderScope(
+                            overrides: [
+                              radioStationsIndexProvider.overrideWithValue(
+                                index,
+                              ),
+                            ],
+                            child: RadioStationCellView(
+                              index: index,
+                              radioStation: radioStation,
+                            ),
+                          ),
                     );
                   },
                 ),

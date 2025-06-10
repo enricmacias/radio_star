@@ -6,7 +6,25 @@ part of 'favorite_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$favoriteStationsHash() => r'ceead0d06e555629a4e4b06f7e5a17da321c139b';
+String _$favoritesListHash() => r'aa3200791d5156435303a97e0daf0095aefdaeb2';
+
+/// See also [favoritesList].
+@ProviderFor(favoritesList)
+final favoritesListProvider = FutureProvider<List<RadioStation>>.internal(
+  favoritesList,
+  name: r'favoritesListProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$favoritesListHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FavoritesListRef = FutureProviderRef<List<RadioStation>>;
+String _$favoriteStationsHash() => r'4c1be544038d2c466e1414ec141a1e2761567c9f';
 
 /// See also [FavoriteStations].
 @ProviderFor(FavoriteStations)

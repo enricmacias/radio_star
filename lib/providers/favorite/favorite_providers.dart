@@ -29,6 +29,8 @@ class FavoriteStations extends _$FavoriteStations {
       'favoriteStations',
       updated.map((s) => jsonEncode(s.toJson())).toList(),
     );
+    // Invalidate favoritesListProvider to refresh listeners
+    ref.invalidate(favoritesListProvider);
   }
 
   Future<void> removeFavorite(RadioStation station) async {
@@ -39,6 +41,8 @@ class FavoriteStations extends _$FavoriteStations {
       'favoriteStations',
       updated.map((s) => jsonEncode(s.toJson())).toList(),
     );
+    // Invalidate favoritesListProvider to refresh listeners
+    ref.invalidate(favoritesListProvider);
   }
 }
 

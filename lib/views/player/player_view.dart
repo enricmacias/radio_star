@@ -33,7 +33,7 @@ class PlayerView extends ConsumerWidget {
           IconButton(
             icon: Icon(
               isFavorite ? Icons.star : Icons.star_border,
-              color: isFavorite ? Colors.yellow : null,
+              color: isFavorite ? Colors.deepPurple : null,
             ),
             tooltip: 'Favorite',
             onPressed:
