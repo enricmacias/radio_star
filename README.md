@@ -1,16 +1,19 @@
 # radio_star
 
-A new Flutter project.
+App to search and listen to radio stations. You can also favorite your favorite stations.
 
-## Getting Started
+![alt text]()
+<img src="https://github.com/enricmacias/radio_star/blob/main/images/logo.png" alt="logo" width="300">
 
-This project is a starting point for a Flutter application.
+## How to Compile the Project
 
-A few resources to get you started if this is your first Flutter project:
+Open a terminal in the project directory and run:
+```
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Things to improve
+- Make errors user friendly
+- Add a default screen on the search section to be able to search stations by genre
+- Keep track of the listening station and mark it yellow in both lists (search and favorites)
