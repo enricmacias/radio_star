@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:radio_star/providers/favorite/favorite_providers.dart';
 import 'package:radio_star/views/player/play_pause_button_view.dart';
 import '../../providers/player/player_provider.dart';
 
@@ -9,9 +10,13 @@ class PlayerView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentStation = ref.watch(currentRadioStationProvider);
+    final favorites = ref.watch(favoriteStationsProvider);
 
-    final stationName = currentStation?.name ?? 'Radio Station';
+    final stationName = currentStation?.name ?? 'No Station';
     final favicon = currentStation?.favicon;
+    final isFavorite =
+        currentStation != null &&
+        favorites.any((s) => s.url == currentStation.url);
 
     return Scaffold(
       appBar: AppBar(
@@ -23,6 +28,30 @@ class PlayerView extends ConsumerWidget {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isFavorite ? Icons.star : Icons.star_border,
+              color: isFavorite ? Colors.yellow : null,
+            ),
+            tooltip: 'Favorite',
+            onPressed:
+                currentStation == null
+                    ? null
+                    : () {
+                      if (isFavorite) {
+                        ref
+                            .read(favoriteStationsProvider.notifier)
+                            .removeFavorite(currentStation);
+                      } else {
+                        ref
+                            .read(favoriteStationsProvider.notifier)
+                            .addFavorite(currentStation);
+                      }
+                    },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(

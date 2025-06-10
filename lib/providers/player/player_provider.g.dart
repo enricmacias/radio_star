@@ -24,7 +24,7 @@ final currentRadioStationProvider =
     );
 
 typedef _$CurrentRadioStation = AutoDisposeNotifier<RadioStation?>;
-String _$playerHash() => r'7f07a2db900ab846a8d49e7c1574f2a259d21e64';
+String _$playerHash() => r'b15b2d3e86afdb7848ffde70b6e242fe23da9142';
 
 /// See also [Player].
 @ProviderFor(Player)
